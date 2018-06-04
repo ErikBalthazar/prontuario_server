@@ -398,38 +398,112 @@ app.post('/medico/maps/add', function (req, res) {
                 res.sendStatus(BAD_REQUEST);
             }
         });
-    });  
+    });
 });
 
-/*
-// FUNCIONANDO
-app.post('/paciente/facebook/new', function (req, res) {
-    let data = req.body;
-    let email = data.email;
-    let name = data.name;
-    let birthdate = data.birthdate;
-    let fbid = data.fbId;
+app.post('/paciente/consultas', function (req, res) {
+    let cpf = req.body.cpf;
 
-    console.log(data);
+    let query = `SELECT * FROM CONSULTA WHERE cpf = '${cpf}'`;
 
-    let query = `INSERT INTO paciente (email, nome_completo, data_nascimento, fbid) VALUES ('${email}', '${name}', '${birthdate}', '${fbid}')`;
-   
     const connection = mysql.createConnection(connectionData);
-    
+
     connection.connect(function(err) {
         if (err) throw err;
         connection.query(query, function(errors, results, fields) {
             if (errors) throw errors;
             console.log(results);
-            res.json({ msg: "Logado com sucesso" });
-            //if (results.length > 0) {
-            //    res.send(results);
-            //} else {
-            //    res.sendStatus(BAD_REQUEST);
-            //}
+            if (results.length > 0) {
+                // montar json
+            } else {
+                res.sendStatus(BAD_REQUEST);
+            }
+        });
+    });  
+});
+
+app.post('/medico/consultas', function (req, res) {
+    let crm = req.body.crm;
+
+    let query = `SELECT * FROM CONSULTA WHERE crm = '${crm}'`;
+
+    const connection = mysql.createConnection(connectionData);
+
+    connection.connect(function(err) {
+        if (err) throw err;
+        connection.query(query, function(errors, results, fields) {
+            if (errors) throw errors;
+            console.log(results);
+            if (results.length > 0) {
+                // montar json
+            } else {
+                res.sendStatus(BAD_REQUEST);
+            }
         });
     });
 });
+
+app.post('/consulta', function (req, res) {
+    let id = req.body.id;
+
+    let query = `SELECT * FROM CONSULTA WHERE id = '${id}'`;
+
+    const connection = mysql.createConnection(connectionData);
+
+    connection.connect(function(err) {
+        if (err) throw err;
+        connection.query(query, function(errors, results, fields) {
+            if (errors) throw errors;
+            console.log(results);
+            if (results.length > 0) {
+                // montar json
+            } else {
+                res.sendStatus(BAD_REQUEST);
+            }
+        });
+    });
+});
+
+/*
+CREATE TABLE PACIENTE(
+    CPF VARCHAR(11) NOT NULL,
+    TIPO_SANGUINEO VARCHAR(3),
+    EMAIL VARCHAR(60) NOT NULL,
+    NOME_COMPLETO VARCHAR(50) NOT NULL,
+    DATA_NASCIMENTO DATE NOT NULL,
+    SENHA VARCHAR(20) NOT NULL,
+    TELEFONE VARCHAR(12) NOT NULL,
+    SEXO CHAR(1) NOT NULL,
+    PRIMARY KEY (CPF)
+);
+
+CREATE TABLE MEDICO(
+    CRM VARCHAR(5) NOT NULL,
+    EMAIL VARCHAR(50) NOT NULL,
+    TELEFONE VARCHAR(12) NOT NULL,
+    SENHA VARCHAR(20) NOT NULL,
+    NOME_COMPLETO VARCHAR(50) NOT NULL,
+    DATA_NASCIMENTO DATE NOT NULL,
+    SEXO CHAR(1),
+    PRIMARY KEY (CRM)
+);
+
+CREATE TABLE CONSULTA(
+    ID INT NOT NULL AUTO_INCREMENT,
+    CRM INT NOT NULL,
+    CPF INT NOT NULL,
+    ALTURA FLOAT(3,2),
+    PESO FLOAT(4,1),
+    PRESSAO FLOAT(3,1),
+    DATA_CONSULTA DATE NOT NULL,
+    SINTOMAS VARCHAR(200) NOT NULL,
+    DIAGNOSTICO VARCHAR(200) NOT NULL,
+    TRATAMENTO VARCHAR(200) NOT NULL
+
+    PRIMARY KEY (ID),
+    FOREIGN KEY (CRM) REFERENCES MEDICO(CRM),
+    FOREIGN KEY (CPF) REFERENCES PACIENTE(CPF)
+);
 */
 
 app.listen(8000)
