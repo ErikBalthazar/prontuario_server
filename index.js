@@ -1,4 +1,4 @@
-var express = require('express')
+﻿var express = require('express')
 var bodyParser = require('body-parser')
 var mysql      = require('mysql');
 var app = express()
@@ -490,15 +490,15 @@ CREATE TABLE MEDICO(
 
 CREATE TABLE CONSULTA(
     ID INT NOT NULL AUTO_INCREMENT,
-    CRM INT NOT NULL,
-    CPF INT NOT NULL,
+    CRM VARCHAR(5) NOT NULL,
+    CPF VARCHAR(11) NOT NULL,
     ALTURA FLOAT(3,2),
     PESO FLOAT(4,1),
     PRESSAO FLOAT(3,1),
     DATA_CONSULTA DATE NOT NULL,
     SINTOMAS VARCHAR(200) NOT NULL,
     DIAGNOSTICO VARCHAR(200) NOT NULL,
-    TRATAMENTO VARCHAR(200) NOT NULL
+    TRATAMENTO VARCHAR(200) NOT NULL,
 
     PRIMARY KEY (ID),
     FOREIGN KEY (CRM) REFERENCES MEDICO(CRM),
