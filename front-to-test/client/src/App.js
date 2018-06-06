@@ -63,7 +63,7 @@ class App extends Component {
   // TESTES DIRETO NO BOTAO
   addPacient() {
     axios.post("http://localhost:8000/paciente/new", {
-      cpf: "11111111111",
+      cpf: "43044075890",
       email: "teste@teste.com",
       name: "Testando",
       birthdate: "2002-05-11",

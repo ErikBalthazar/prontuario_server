@@ -307,10 +307,18 @@ app.post('/paciente/email', function(req, res){
             if (errors) throw errors;
             console.log(results);
             if (results.length > 0) {
-                let jsonResult = {
-                    cpf: results[0]
-                };
-                res.json(jsonResult);
+                let data = results[0];
+                res.json(
+                    {
+                        cpf: data.CPF,
+                        email: data.EMAIL,
+                        name: data.NOME_COMPLETO,
+                        birthdate: data.DATA_NASCIMENTO,
+                        password: data.SENHA,
+                        phoneNumber: data.TELEFONE,
+                        gender: data.SEXO,
+                        fbid: data.FBID
+                    });
             } else {
                 res.sendStatus(BAD_REQUEST);
             }
