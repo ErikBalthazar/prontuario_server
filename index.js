@@ -212,6 +212,7 @@ app.post('/paciente/facebook/new', function (req, res) {
     let name = data.name;
     let birthdate = data.birthdate;
     let fbid = data.fbId;
+    let image = data.image;
 
     console.log(data);
 
@@ -227,7 +228,43 @@ app.post('/paciente/facebook/new', function (req, res) {
             if (results.length > 0) {
                 res.json({ msg: "Logado com sucesso" });
             } else {
-                query = `INSERT INTO paciente (email, nome_completo, data_nascimento, fbid) VALUES ('${email}', '${name}', '${birthdate}', '${fbid}')`;
+                query = `INSERT INTO paciente (email, nome_completo, data_nascimento, fbid, image) VALUES ('${email}', '${name}', '${birthdate}', '${fbid}', '${image}')`;
+                console.log(query);
+                connection.query(query, function(errors2, results2, fields2) {
+                    if (errors2) throw errors2;
+                    console.log(results2);
+                    res.json({ msg: "Logado com sucesso" });
+                });
+            }
+        });
+    });
+});
+
+app.post('/paciente/google/new', function (req, res) {
+    let data = req.body;
+    let email = data.email;
+    let name = data.name;
+    let googleid = data.googleid;
+    let image = data.image;
+
+    console.log(data);
+
+    let query = `SELECT * from paciente WHERE googleid = ${googleid}`;
+   
+    console.log(query);
+
+    const connection = mysql.createConnection(connectionData);
+    
+    connection.connect(function(err) {
+        if (err) throw err;
+        connection.query(query, function(errors, results, fields) {
+            if (errors) throw errors;
+            console.log(results);
+            if (results.length > 0) {
+                res.json({ msg: "Logado com sucesso" });
+            } else {
+                query = `INSERT INTO paciente (email, nome_completo, googleid, image) VALUES ('${email}', '${name}', '${googleid}', '${image}')`;
+                console.log(query);
                 connection.query(query, function(errors2, results2, fields2) {
                     if (errors2) throw errors2;
                     console.log(results2);
@@ -261,7 +298,9 @@ app.post('/paciente/cpf', function(req, res){
                         password: data.SENHA,
                         phoneNumber: data.TELEFONE,
                         gender: data.SEXO,
-                        fbid: data.FBID
+                        fbid: data.FBID,
+                        googleid: data.googleid,
+                        image: data.image
                     });
             } else {
                 res.sendStatus(BAD_REQUEST);
@@ -317,7 +356,9 @@ app.post('/paciente/email', function(req, res){
                         password: data.SENHA,
                         phoneNumber: data.TELEFONE,
                         gender: data.SEXO,
-                        fbid: data.FBID
+                        fbid: data.FBID,
+                        googleid: data.googleid,
+                        image: data.image
                     });
             } else {
                 res.sendStatus(BAD_REQUEST);
