@@ -206,8 +206,33 @@ app.post('/medico/update', function(req, res) {
 });
 
 
+app.post('/paciente/facebook/check', function (req, res) {
+    let data = req.body;
+    let fbid = data.fbId;
+
+    console.log(data);
+
+    let query = `SELECT * from paciente WHERE fbid = ${fbid}`;
+   
+    const connection = mysql.createConnection(connectionData);
+    
+    connection.connect(function(err) {
+        if (err) throw err;
+        connection.query(query, function(errors, results, fields) {
+            if (errors) throw errors;
+            console.log(results);
+            if (results.length > 0) {
+                res.json({ msg: "Logado com sucesso", signup: false });
+            } else {
+                res.json({ msg: "Logado com sucesso", signup: true });
+            }
+        });
+    });
+});
+
 app.post('/paciente/facebook/new', function (req, res) {
     let data = req.body;
+    let cpf = data.cpf;
     let email = data.email;
     let name = data.name;
     let birthdate = data.birthdate;
@@ -228,7 +253,7 @@ app.post('/paciente/facebook/new', function (req, res) {
             if (results.length > 0) {
                 res.json({ msg: "Logado com sucesso" });
             } else {
-                query = `INSERT INTO paciente (email, nome_completo, data_nascimento, fbid, image) VALUES ('${email}', '${name}', '${birthdate}', '${fbid}', '${image}')`;
+                query = `INSERT INTO paciente (cpf, email, nome_completo, data_nascimento, fbid, image) VALUES ('${cpf}', '${email}', '${name}', '${birthdate}', '${fbid}', '${image}')`;
                 console.log(query);
                 connection.query(query, function(errors2, results2, fields2) {
                     if (errors2) throw errors2;
@@ -240,7 +265,7 @@ app.post('/paciente/facebook/new', function (req, res) {
     });
 });
 
-app.post('/paciente/google/new', function (req, res) {
+app.post('/paciente/google/check', function (req, res) {
     let data = req.body;
     let email = data.email;
     let name = data.name;
